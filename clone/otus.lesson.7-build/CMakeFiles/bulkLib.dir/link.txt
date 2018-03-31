@@ -1,0 +1,2 @@
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ar qc libbulkLib.a  CMakeFiles/bulkLib.dir/interpreter.cpp.o CMakeFiles/bulkLib.dir/commandblock.cpp.o CMakeFiles/bulkLib.dir/cout_observer.cpp.o CMakeFiles/bulkLib.dir/log_observer.cpp.o CMakeFiles/bulkLib.dir/application.cpp.o
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ranlib libbulkLib.a
