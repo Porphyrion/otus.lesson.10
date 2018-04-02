@@ -1,35 +1,45 @@
 #include "observer.h"
 
 void CommandBlock::appendCommand(std::string command){
-    if(block.size() == blockSize){
-        setStatus(1);
-        block.clear();
+    if(!dynamic){
+        if(block.size() == 0){
+            setStatus(Status::start);
+        }
+        block.push_back(command);
+        if(block.size() == blockSize){
+            setStatus(Status::stop);
+        }
     }
-    block.push_back(command);
-}
+    else{
+        block.push_back(command);
+    }
+};
 
 void CommandBlock::subscribe(Observer * obs){
     subs.push_back(obs);
 };
 
 void CommandBlock::setStatus(Status s){
-    stat = s;
-    if(stat == Status::start) commands.clear();
-    else if(stat == Status::start_dynamic){
-        if(commands.size())
-            setStatus(Stat::stop);
+    status = s;
+    if(status == Status::start) block.clear();
+    else if(status == Status::start_dynamic){
+        if(block.size())
+            setStatus(Status::stop);
         dynamic = true;
-        stat = Status::start;
+        status = Status::start;
     }
     else if(status == Status::last_bulk){
-        if(!dynamic &&  commands.size() > 0) status = Status::stop;
+        if(!dynamic &&  block.size() > 0) status = Status::stop;
     }
     notify();
 };
 
 void CommandBlock::notify(){
-    std::cout<<"hmmm";
-    for(auto obs : subs){
-        obs->update(stat);
+    for(auto i : subs){
+        i->update(status);
     }
-}
+    if(status == Status::stop) {
+        block.clear();
+        if(dynamic) dynamic = false;
+    }
+};

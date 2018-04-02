@@ -1,26 +1,21 @@
 #pragma once
 
 #include <memory>
-#include "commandblock.h"
 #include "observer.h"
 
-enum class Status{
-    nothing, start, stop, last_bulk, start_dynamic
-};
-
+class CoutObserver;
+class LogObserver;
 class CommandBlock;
 
 class Interpreter{
 public:
-    Interpreter(int n_): cb{n_}{
-        std::cout<<"Inter constr"<<std::endl;
-    };
+    Interpreter(int n_);
     void readCommand(std::string s);
+    void lastBulk();
 
 private:
-    CommandBlock cb;
-    LogObserver lo{std::make_shared<CommandBlock>(cb)};
-    CoutObserver co{std::make_shared<CommandBlock>(cb)};
+    std::shared_ptr<CommandBlock> cb;
+    LogObserver lo;
+    CoutObserver co;
     long dynamicCounter;
-
 };

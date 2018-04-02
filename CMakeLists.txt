@@ -4,14 +4,14 @@ project(bulkmt)
 set(CMAKE_CXX_STANDARD 14)
 
 find_package(Threads)
+find_package(Boost)
+
+include_directories(${Boost_INCLUDE_DIR})
 
 add_library(application application.cpp)
-
-add_library(interpreter interpreter.cpp)
-
-# add_library(commandblock commandblock.cpp)
-
 add_library(observer commandblock.cpp observer.cpp)
+add_library(interpreter interpreter.cpp)
+# add_library(commandblock commandblock.cpp)
 
 add_executable(bulk main.cpp)
 
