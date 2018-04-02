@@ -29,7 +29,7 @@ void LogObserver::update(Status s){
 
 void CoutObserver::update(Status s){
     if(s == Status::stop){
-        std::cout<<"bulk";
+        std::cout<<"bulk: ";
         for(auto i : sharedBlock->block)
             std::cout<<i<<" ";
         std::cout<<std::endl;
