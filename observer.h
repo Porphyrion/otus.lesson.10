@@ -5,7 +5,13 @@
 #include <memory>
 #include <vector>
 #include <string>
+#include<thread>
+#include <mutex>
+#include <condition_variable>
 #include <boost/lexical_cast.hpp>
+#include "threadsafe_queue.h"
+
+using  Block = std::vector<std::string>;
 
 enum class Status{
     nothing, start, stop, last_bulk, start_dynamic
@@ -18,18 +24,20 @@ public:
 
 class CommandBlock{
 public:
-    CommandBlock(int n_):blockSize(n_), status(Status::nothing){
-    };
+    CommandBlock(int n_, std);
+    CommandBlock(CommandBlock const& other);
+    threadSafeQueuq<Block> getLog();
+    threadSafeQueuq<Block> getTxt();
     void appendCommand(std::string command);
     void subscribe(Observer* obs);
     void setStatus(Status s);
     void notify();
 
-    std::vector<std::string> block;
 private:
 
-    std::vector<Observer*> subs;
-    Status status;
+    threadSafeQueuq<Block> log_q;
+    threadSafeQueuq<Block> txt_q;
+    Block block;
     int blockSize;
     bool dynamic;
 };
@@ -37,6 +45,7 @@ private:
 class LogObserver : protected Observer{
 public:
     explicit LogObserver(std::shared_ptr<CommandBlock> sb_);
+    void operator()(threadSafeQueuq<block> &q);
     void update(Status s) override;
 
 private:
@@ -49,6 +58,7 @@ class CoutObserver : protected Observer{
 public:
     explicit CoutObserver(std::shared_ptr<CommandBlock> sb_) ;
 
+    void operator()(threadSafeQueuq<block> &q);
     void update(Status s) override;
 
 private:

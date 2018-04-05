@@ -1,11 +1,18 @@
 #pragma once
 
 #include <memory>
+#include <thread>
+#include <atomic>
+#include <vector>
+#include <string>
+#include <condition_variable>
 #include "observer.h"
 
 class CoutObserver;
 class LogObserver;
 class CommandBlock;
+
+using  b = std::vector<std::string>;
 
 class Interpreter{
 public:
@@ -15,7 +22,12 @@ public:
 
 private:
     std::shared_ptr<CommandBlock> cb;
-    LogObserver lo;
-    CoutObserver co;
+    std::vector<CoutObserver>  co;
+    std::vector<LogObserver> lo;
+    std::<thread> obsThreads;
+    std::condition_variable dataCondLog;
+    std::condition_variable dataCondTxt;
+
     long dynamicCounter;
+
 };

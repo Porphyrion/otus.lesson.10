@@ -3,8 +3,12 @@
 
 int main(int argc, char const *argv[]) {
 
-    long N = atoi(argv[1]);
-    Application app(N);
-    app.run();
+    if(argc > 1){
+        long N = atoi(argv[1]);
+        Application bulkmt(N);
+        bulkmt.run();
+    } else {
+        std::cout<<"Few arguments"<<std::endl;
+    }
     return 0;
 }
