@@ -8,6 +8,7 @@
 #include <mutex>
 #include <condition_variable>
 #include <boost/lexical_cast.hpp>
+#include "metrics.h"
 #include "threadsafe_queue.h"
 
 enum class Status{
@@ -38,4 +39,6 @@ public:
     threadSafeQueuq<Block> txt_q{dataCondTxt, lastBulk_};
     mutable std::mutex cv_m_c;
     mutable std::mutex cv_m_txt;
+
+    Metrics mainMetrics;
 };

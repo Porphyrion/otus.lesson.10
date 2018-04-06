@@ -16,18 +16,23 @@ void CommandBlock::appendCommand(std::string command){
     }
 };
 
-void CommandBlock::setStatus(Status status_){
-    status = status_;
+void CommandBlock::setStatus(Status newStatus){
+    status = newStatus;
     if(status == Status::start) block.clear();
     else if(status == Status::start_dynamic){
         if(block.size()){
             log_q.push(block);
             txt_q.push(block);
+            mainMetrics.blocks++;
         }
         dynamic = true;
         setStatus(Status::start);
     }
     else if(status == Status::last_bulk){
+        if(block.size()){
+            log_q.push(block);
+            txt_q.push(block);
+        }
         lastBulk_.store(false);
         dataCondLog.notify_all();
         dataCondTxt.notify_all();
@@ -35,6 +40,7 @@ void CommandBlock::setStatus(Status status_){
     else if(status == Status::stop){
         log_q.push(block);
         txt_q.push(block);
+        mainMetrics.blocks++;
         block.clear();
     };
 };

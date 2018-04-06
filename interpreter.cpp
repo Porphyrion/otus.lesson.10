@@ -15,6 +15,7 @@ Interpreter::Interpreter(int n_) : cb(std::make_shared<CommandBlock>(n_))
 };
 
 void Interpreter::readCommand(std::string s){
+    cb->mainMetrics.lines++;
     if(s == "{"){
         if(!dynamicCounter)
             cb->setStatus(Status::start_dynamic);
@@ -26,6 +27,7 @@ void Interpreter::readCommand(std::string s){
             cb->setStatus(Status::stop);
     }
     else{
+        cb->mainMetrics.commands++;
         cb->appendCommand(s);
     }
 };
@@ -35,4 +37,6 @@ void Interpreter::lastBulk(){
     for(auto& i : obsThreads){
         i.join();
     }
+    std::cout<<"Main thread: line "<<cb->mainMetrics.lines<<" commands "<<cb->mainMetrics.commands
+        <<" blocks "<<cb->mainMetrics.blocks<<std::endl;
 };
