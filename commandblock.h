@@ -29,8 +29,7 @@ private:
 public:
     CommandBlock(int n_);
     CommandBlock(CommandBlock && other) = default;
-    threadSafeQueuq<Block>& getLog();
-    threadSafeQueuq<Block>& getTxt();
+
     void appendCommand(std::string command);
     void setStatus(Status s);
     void notify();
@@ -39,5 +38,5 @@ public:
     threadSafeQueuq<Block> log_q{dataCondLog, lastBulk_};
     threadSafeQueuq<Block> txt_q{dataCondTxt, lastBulk_};
     mutable std::mutex cv_m_c;
-
+    mutable std::mutex cv_m_txt;
 };

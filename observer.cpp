@@ -1,20 +1,20 @@
 #include "observer.h"
 
-LogObserver::LogObserver(std::shared_ptr<CommandBlock> sb_) : sharedBlock(sb_){
+LogObserver::LogObserver(std::shared_ptr<CommandBlock> sb_) : Observer(sb_){
 };
 
-LogObserver::LogObserver(LogObserver const&other){
+/*LogObserver::LogObserver(LogObserver const&other){
         std::unique_lock<std::mutex> lock_other(other.cv_m);
         sharedBlock = other.sharedBlock;
+};*/
+
+CoutObserver::CoutObserver(std::shared_ptr<CommandBlock> sb_) : Observer(sb_) {
 };
 
-CoutObserver::CoutObserver(std::shared_ptr<CommandBlock> sb_) : sharedBlock(sb_) {
-};
-
-CoutObserver::CoutObserver(CoutObserver const&other){
+/*CoutObserver::CoutObserver(CoutObserver const&other){
     std::unique_lock<std::mutex> lock_other(other.cv_m);
     sharedBlock = other.sharedBlock;
-};
+};*/
 
 void LogObserver::operator()(){
     Block res;
@@ -24,7 +24,7 @@ void LogObserver::operator()(){
 };
 
 void LogObserver::update(Block res){
-    std::lock_guard<std::mutex> txt_m(cv_m);
+    std::lock_guard<std::mutex> txt_m(sharedBlock->cv_m_txt);
     std::ofstream bulkFile("logFile.txt", std::ios::out | std::ios::app);
     bulkFile<<"bulk: ";
     for(auto i : res){

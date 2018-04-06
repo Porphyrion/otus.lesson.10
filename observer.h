@@ -14,68 +14,38 @@
 
 using Block = std::vector<std::string>;
 
-
-/*enum class Status{
-    nothing, start, stop, last_bulk, start_dynamic
-};*/
-
 class Observer {
 public:
-    //explicit Observer()
+    Observer(std::shared_ptr<CommandBlock> sb_) : sharedBlock(sb_){};
     virtual void update(Block s) = 0;
+protected:
+    std::shared_ptr<CommandBlock> sharedBlock;
 };
-
-/*class CommandBlock{
-private:
-    Block block;
-    int blockSize;
-    bool dynamic;
-    Status status;
-    std::condition_variable dataCondLog;
-    std::condition_variable dataCondTxt;
-
-public:
-    CommandBlock(int n_);
-    CommandBlock(CommandBlock && other) = default;
-    threadSafeQueuq<Block>& getLog();
-    threadSafeQueuq<Block>& getTxt();
-    void appendCommand(std::string command);
-    void setStatus(Status s);
-    void notify();
-
-    std::atomic_bool lastBulk_;
-    threadSafeQueuq<Block> log_q{dataCondLog, lastBulk_};
-    threadSafeQueuq<Block> txt_q{dataCondTxt, lastBulk_};
-    mutable std::mutex cv_m_c;
-
-};*/
 
 class LogObserver : protected Observer{
 public:
-    explicit LogObserver(std::shared_ptr<CommandBlock> sb_);
-    LogObserver(LogObserver const& other);// = default;
-    LogObserver(LogObserver && other) = default;
+    LogObserver(std::shared_ptr<CommandBlock> sb_);
+    //LogObserver(LogObserver const& other);
+    //LogObserver(LogObserver && other) = default;
 
     void operator()();
     void update(Block s) override;
 
 private:
-    mutable std::mutex cv_m;
     //std::string bulkBeginTime;
     //std::string bulkFileName;
-    std::shared_ptr<CommandBlock> sharedBlock;
+    //std::shared_ptr<CommandBlock> sharedBlock;
 };
 
 class CoutObserver : protected Observer{
 public:
-    explicit CoutObserver(std::shared_ptr<CommandBlock> sb_);
-    CoutObserver(CoutObserver && other) = default;
-    CoutObserver(CoutObserver const& other);// = default;
+    CoutObserver(std::shared_ptr<CommandBlock> sb_);
+    //CoutObserver(CoutObserver && other) = default;
+    //CoutObserver(CoutObserver const& other);
 
     void operator()();
     void update(Block s) override;
 
 private:
-    mutable std::mutex cv_m;
-    std::shared_ptr<CommandBlock> sharedBlock;
+    //std::shared_ptr<CommandBlock> sharedBlock;
 };

@@ -38,11 +38,3 @@ void CommandBlock::setStatus(Status status_){
         block.clear();
     };
 };
-
-threadSafeQueuq<Block>& CommandBlock::getLog(){
-    return log_q;
-};
-
-threadSafeQueuq<Block>& CommandBlock::getTxt(){
-    return txt_q;
-};
