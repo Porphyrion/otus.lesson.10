@@ -7,32 +7,45 @@
 template <typename T>
 class threadSafeQueuq{
 private:
-    mutable std::mutex mut;
     std::queue<T> dataQueue;
-    std::condition_variable dataCond;
-    std::atomic<bool>& stat;
+    std::condition_variable& dataCond;
+    const std::atomic<bool>& stat;
+    mutable std::mutex mut;
 
 public:
 
-    threadSafeQueuq(){
-
+    threadSafeQueuq(std::condition_variable &dc, const std::atomic<bool>& s_) :
+    dataCond(dc),stat(s_)
+     {
      };
     threadSafeQueuq(threadSafeQueuq const& other){
         std::lock_guard<std::mutex> lk(other.mut);
         dataQueue =  other.dataQueue;
+        stat = other.stat;
     };
 
     void push(T new_value){
         std::lock_guard<std::mutex> lk(mut);
         dataQueue.push(new_value);
-        dataCond.notify_one();
+        dataCond.notify_all();
     };
 
     bool wait_and_pop(T& value){
+
         std::unique_lock<std::mutex> lk(mut);
-        dataCond.wait(lk, [this]{return !dataQueue.empty() ;});// || !stat;});
+        dataCond.wait(lk, [this]{return !dataQueue.empty() || !stat;});// || !stat;});
+        if(!dataQueue.empty()) {
+            value = dataQueue.front();
+            dataQueue.pop();
+            //dataCond.notify_all();
+            return true;
+        } else if(!stat) {
+            //dataCond.notify_all();
+            return false;}
         value = dataQueue.front();
         dataQueue.pop();
+
+        //dataCond.notify_all();
         return true;
     };
 
@@ -61,7 +74,8 @@ public:
     };
 
     bool empty() const{
-        std::lock_guard<std::mutex> lk(mut);
+        std::unique_lock<std::mutex> lk(mut);
         return dataQueue.empty();
     };
+
 };

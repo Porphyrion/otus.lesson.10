@@ -22,11 +22,10 @@ public:
 
 private:
     std::shared_ptr<CommandBlock> cb;
-    std::vector<CoutObserver>  co;
-    std::vector<LogObserver> lo;
-    std::<thread> obsThreads;
-    std::condition_variable dataCondLog;
-    std::condition_variable dataCondTxt;
+    std::vector<std::unique_ptr<CoutObserver>>  co;
+    std::vector<std::unique_ptr<LogObserver>> lo;
+    std::vector<std::thread> obsThreads;
+
 
     long dynamicCounter;
 
