@@ -2,10 +2,8 @@
 
 #include <memory>
 #include <thread>
-#include <atomic>
 #include <vector>
 #include <string>
-#include <condition_variable>
 #include "commandblock.h"
 #include "observer.h"
 #include "metrics.h"
@@ -13,8 +11,6 @@
 class CoutObserver;
 class LogObserver;
 class CommandBlock;
-
-using  b = std::vector<std::string>;
 
 class Interpreter{
 public:
@@ -30,5 +26,4 @@ private:
     std::vector<std::thread> obsThreads;
 
     long dynamicCounter;
-
 };

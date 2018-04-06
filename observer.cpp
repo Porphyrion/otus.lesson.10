@@ -1,21 +1,5 @@
 #include "observer.h"
 
-LogObserver::LogObserver(std::shared_ptr<CommandBlock> sb_) : Observer(sb_){
-};
-
-/*LogObserver::LogObserver(LogObserver const&other){
-        std::unique_lock<std::mutex> lock_other(other.cv_m);
-        sharedBlock = other.sharedBlock;
-};*/
-
-CoutObserver::CoutObserver(std::shared_ptr<CommandBlock> sb_) : Observer(sb_) {
-};
-
-/*CoutObserver::CoutObserver(CoutObserver const&other){
-    std::unique_lock<std::mutex> lock_other(other.cv_m);
-    sharedBlock = other.sharedBlock;
-};*/
-
 void LogObserver::operator()(){
     Block res;
     while(sharedBlock->txt_q.wait_and_pop(res)){
