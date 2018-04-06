@@ -1,8 +1,8 @@
-#include "observer.h"
+#include "commandblock.h"
 
 CommandBlock::CommandBlock(int n_):blockSize(n_), status(Status::nothing) {
+    lastBulk_.store(true);
 };
-
 
 void CommandBlock::appendCommand(std::string command){
     if(!dynamic){
@@ -16,10 +16,6 @@ void CommandBlock::appendCommand(std::string command){
     }
 };
 
-//void CommandBlock::subscribe(Observer * obs){
-//    subs.push_back(obs);
-//};
-
 void CommandBlock::setStatus(Status status_){
     status = status_;
     if(status == Status::start) block.clear();
@@ -32,25 +28,16 @@ void CommandBlock::setStatus(Status status_){
         setStatus(Status::start);
     }
     else if(status == Status::last_bulk){
-        if(!dynamic &&  block.size() > 0) status = Status::stop;
+        lastBulk_.store(false);
+        dataCondLog.notify_all();
+        dataCondTxt.notify_all();
     }
     else if(status == Status::stop){
         log_q.push(block);
         txt_q.push(block);
         block.clear();
     };
-    //notify();
 };
-
-/*void CommandBlock::notify(){
-    for(auto i : subs){
-        i->update(status);
-    }
-    if(status == Status::stop) {
-        block.clear();
-        if(dynamic) dynamic = false;
-    }
-};*/
 
 threadSafeQueuq<Block>& CommandBlock::getLog(){
     return log_q;

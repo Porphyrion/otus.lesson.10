@@ -1,3 +1,5 @@
+#pragma once
+
 #include <queue>
 #include <memory>
 #include <mutex>
@@ -15,9 +17,7 @@ private:
 public:
 
     threadSafeQueuq(std::condition_variable &dc, const std::atomic<bool>& s_) :
-    dataCond(dc),stat(s_)
-     {
-     };
+    dataCond(dc),stat(s_) {};
     threadSafeQueuq(threadSafeQueuq const& other){
         std::lock_guard<std::mutex> lk(other.mut);
         dataQueue =  other.dataQueue;
@@ -27,25 +27,22 @@ public:
     void push(T new_value){
         std::lock_guard<std::mutex> lk(mut);
         dataQueue.push(new_value);
-        dataCond.notify_all();
+        dataCond.notify_one();
     };
 
     bool wait_and_pop(T& value){
-
         std::unique_lock<std::mutex> lk(mut);
         dataCond.wait(lk, [this]{return !dataQueue.empty() || !stat;});// || !stat;});
         if(!dataQueue.empty()) {
             value = dataQueue.front();
             dataQueue.pop();
-            //dataCond.notify_all();
+            dataCond.notify_one();
             return true;
         } else if(!stat) {
-            //dataCond.notify_all();
             return false;}
         value = dataQueue.front();
         dataQueue.pop();
-
-        //dataCond.notify_all();
+        dataCond.notify_one();
         return true;
     };
 
