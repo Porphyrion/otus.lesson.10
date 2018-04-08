@@ -10,17 +10,20 @@ include_directories(${Boost_INCLUDE_DIR})
 
 configure_file(version.h.in version.h)
 
+
 add_library(application application.cpp)
 add_library(observer observer.cpp)
 add_library(interpreter interpreter.cpp)
 add_library(commandblock commandblock.cpp)
 
 add_executable(bulkmt main.cpp)
+
 set_target_properties(bulkmt application interpreter observer commandblock  PROPERTIES
 	CXX_STANDARD 14
-	CXX_STANDART_REQUIRED ON
+	CXX_STANDARD_REQUIRED ON
 	COMPILE_OPTION -Wpedantic -Wall -Wextra
 	)
+
 target_link_libraries(bulkmt
     application
     interpreter
