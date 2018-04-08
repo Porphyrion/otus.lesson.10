@@ -5,6 +5,7 @@ before_script:
   - echo "deb http://archive.ubuntu.com/ubuntu xenial main universe" | sudo tee -a /etc/apt/sources.list
   - sudo apt-get update -qq
   - sudo apt-get install libspdlog-dev -y
+  - sudo apt-get install -y g++-5
 script:
 - cmake .
 - cmake --build .
