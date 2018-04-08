@@ -1,12 +1,26 @@
 #include "interpreter.h"
 
-Interpreter::Interpreter(int n_) : cb(std::make_shared<CommandBlock>(n_))
+Interpreter::Interpreter(int n_) : cb(std::make_shared<CommandBlock>(n_)), logThreads(1), fileThreads(2)
 {
     mainMetrics = std::unique_ptr<Metrics>();
     obsThreads.reserve(4);
-    for(auto i = 0; i < 2; ++i)
+    for(auto i = 0; i < fileThreads; ++i)
         fo.push_back(std::make_unique<FileObserver>(cb, i));
-    for(auto i = 0; i < 2; ++i)
+    for(auto i = 0; i < logThreads; ++i)
+        lo.push_back(std::make_unique<LogObserver>(cb, i));
+    for(auto& i : fo)
+        obsThreads.emplace_back(std::thread(*i));
+    for(auto& i : lo)
+        obsThreads.emplace_back(std::thread(*i));
+};
+
+Interpreter::Interpreter(int n_, int lt_, int tt_) : cb(std::make_shared<CommandBlock>(n_)), logThreads(lt_), fileThreads(tt_)
+{
+    mainMetrics = std::unique_ptr<Metrics>();
+    obsThreads.reserve(4);
+    for(auto i = 0; i < fileThreads; ++i)
+        fo.push_back(std::make_unique<FileObserver>(cb, i));
+    for(auto i = 0; i < logThreads; ++i)
         lo.push_back(std::make_unique<LogObserver>(cb, i));
     for(auto& i : fo)
         obsThreads.emplace_back(std::thread(*i));

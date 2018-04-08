@@ -1,20 +1,20 @@
 #include "observer.h"
 
 void FileObserver::operator()(){
-    Block res;
+    timeStampBlock res;
     while(sharedBlock->file_q.wait_and_pop(res)){
-        obsMetrics.commands = obsMetrics.commands + res.size();
+        obsMetrics.commands = obsMetrics.commands + res.second.size();
         ++obsMetrics.blocks;
         update(res);
     }
     writeMetrics();
 };
 
-void FileObserver::update(Block res){
+void FileObserver::update(timeStampBlock res){
     std::lock_guard<std::mutex> txt_m(sharedBlock->cv_m_txt);
-    std::ofstream bulkFile("logFile" +id +".txt", std::ios::out | std::ios::app);
+    std::ofstream bulkFile(res.first + id + ".log", std::ios::out | std::ios::app);
     bulkFile<<"bulk: ";
-    for(auto i : res){
+    for(auto i : res.second){
         bulkFile<<i<<" ";
     }
     bulkFile<<std::endl;

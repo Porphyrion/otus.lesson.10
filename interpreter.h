@@ -16,6 +16,7 @@ class CommandBlock;
 class Interpreter{
 public:
     Interpreter(int n_);
+    Interpreter(int n_, int lt, int tt);
     void readCommand(std::string s);
     void lastBulk();
     std::unique_ptr<Metrics> mainMetrics;
@@ -25,6 +26,9 @@ private:
     std::vector<std::unique_ptr<FileObserver>>  fo;
     std::vector<std::unique_ptr<LogObserver>> lo;
     std::vector<std::thread> obsThreads;
+
+    int fileThreads;
+    int logThreads;
 
     long dynamicCounter;
 };

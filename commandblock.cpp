@@ -18,29 +18,30 @@ void CommandBlock::appendCommand(std::string command){
 
 void CommandBlock::setStatus(Status newStatus){
     status = newStatus;
-    if(status == Status::start) block.clear();
+    if(status == Status::start){
+        timeStamp = boost::lexical_cast<std::string>(time(nullptr));
+        block.clear();
+    }
     else if(status == Status::start_dynamic){
-        if(block.size()){
-            log_q.push(block);
-            file_q.push(block);
-            mainMetrics.blocks++;
-        }
+        if(block.size()) push();
         dynamic = true;
         setStatus(Status::start);
     }
     else if(status == Status::last_bulk){
-        if(block.size()){
-            log_q.push(block);
-            file_q.push(block);
-        }
+        if(block.size())  push();
         lastBulk_.store(false);
         dataCondLog.notify_all();
         dataCondTxt.notify_all();
     }
     else if(status == Status::stop){
-        log_q.push(block);
-        file_q.push(block);
-        mainMetrics.blocks++;
+        push();
         block.clear();
+        timeStamp.clear();
     };
 };
+
+void CommandBlock::push(){
+    log_q.push(block);
+    file_q.push(std::make_pair(timeStamp, block));
+    mainMetrics.blocks++;
+}

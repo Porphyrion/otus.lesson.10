@@ -6,6 +6,7 @@
 #include <string>
 #include <thread>
 #include <mutex>
+#include <utility>
 #include <condition_variable>
 #include <boost/lexical_cast.hpp>
 #include "metrics.h"
@@ -16,15 +17,19 @@ enum class Status{
 };
 
 using Block = std::vector<std::string>;
+using timeStampBlock = std::pair<std::string, Block>;
 
 class CommandBlock{
 private:
     Block block;
+    std::string timeStamp;
     int blockSize;
     bool dynamic;
     Status status;
     std::condition_variable dataCondLog;
     std::condition_variable dataCondTxt;
+
+    void push();
 
 public:
     CommandBlock(int n_);
@@ -32,11 +37,10 @@ public:
 
     void appendCommand(std::string command);
     void setStatus(Status s);
-    void notify();
 
     std::atomic_bool lastBulk_;
     threadSafeQueuq<Block> log_q{dataCondLog, lastBulk_};
-    threadSafeQueuq<Block> file_q{dataCondTxt, lastBulk_};
+    threadSafeQueuq<timeStampBlock> file_q{dataCondTxt, lastBulk_};
     mutable std::mutex cv_m_l;
     mutable std::mutex cv_m_txt;
 
