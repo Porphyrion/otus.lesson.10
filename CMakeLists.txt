@@ -10,7 +10,6 @@ include_directories(${Boost_INCLUDE_DIR})
 
 configure_file(version.h.in version.h)
 
-
 add_library(application application.cpp)
 add_library(observer observer.cpp)
 add_library(interpreter interpreter.cpp)
