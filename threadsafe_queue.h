@@ -11,17 +11,17 @@ class threadSafeQueuq{
 private:
     std::queue<T> dataQueue;
     std::condition_variable& dataCond;
-    const std::atomic<bool>& stat;
+    const std::atomic<bool>& lastBulk;
     mutable std::mutex mut;
 
 public:
 
-    threadSafeQueuq(std::condition_variable &dc, const std::atomic<bool>& s_) :
-    dataCond(dc),stat(s_) {};
+    threadSafeQueuq(std::condition_variable &dc, const std::atomic<bool>& lb_) :
+    dataCond(dc),lastBulk(lb_) {};
     threadSafeQueuq(threadSafeQueuq const& other){
         std::lock_guard<std::mutex> lk(other.mut);
         dataQueue =  other.dataQueue;
-        stat = other.stat;
+        lastBulk = other.lastBulk;
     };
 
     void push(T new_value){
@@ -32,17 +32,15 @@ public:
 
     bool wait_and_pop(T& value){
         std::unique_lock<std::mutex> lk(mut);
-        dataCond.wait(lk, [this]{return !dataQueue.empty() || !stat;});
+        dataCond.wait(lk, [this]{return !dataQueue.empty() || !lastBulk;});
         if(!dataQueue.empty()) {
             value = dataQueue.front();
             dataQueue.pop();
             dataCond.notify_one();
             return true;
-        } else if(!stat) {
+        } else if(!lastBulk) {
             return false;}
-        value = dataQueue.front();
-        dataQueue.pop();
-        dataCond.notify_one();
+
         return true;
     };
 

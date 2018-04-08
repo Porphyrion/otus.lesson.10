@@ -13,7 +13,6 @@ class Observer {
 public:
     Observer(std::shared_ptr<CommandBlock> sb_, int id_) : sharedBlock(sb_),
                                                             obsMetrics(), id(std::to_string(id_)){};
-    //virtual void update(Block s) = 0;
     virtual void writeMetrics() = 0;
 protected:
     std::shared_ptr<CommandBlock> sharedBlock;
