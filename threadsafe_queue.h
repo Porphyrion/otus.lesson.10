@@ -32,7 +32,7 @@ public:
 
     bool wait_and_pop(T& value){
         std::unique_lock<std::mutex> lk(mut);
-        dataCond.wait(lk, [this]{return !dataQueue.empty() || !stat;});// || !stat;});
+        dataCond.wait(lk, [this]{return !dataQueue.empty() || !stat;});
         if(!dataQueue.empty()) {
             value = dataQueue.front();
             dataQueue.pop();
