@@ -1,4 +1,0 @@
-/Users/porphyrion/Documents/LearnCpp/OTUS/homework/otus.lesson.10/clone/otus.lesson.7-build/CMakeFiles/bulkLib.dir
-/Users/porphyrion/Documents/LearnCpp/OTUS/homework/otus.lesson.10/clone/otus.lesson.7-build/CMakeFiles/rebuild_cache.dir
-/Users/porphyrion/Documents/LearnCpp/OTUS/homework/otus.lesson.10/clone/otus.lesson.7-build/CMakeFiles/edit_cache.dir
-/Users/porphyrion/Documents/LearnCpp/OTUS/homework/otus.lesson.10/clone/otus.lesson.7-build/CMakeFiles/bulk.dir
