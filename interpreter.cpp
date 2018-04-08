@@ -5,9 +5,9 @@ Interpreter::Interpreter(int n_) : cb(std::make_shared<CommandBlock>(n_)), logTh
     mainMetrics = std::unique_ptr<Metrics>();
     obsThreads.reserve(4);
     for(auto i = 0; i < fileThreads; ++i)
-        fo.push_back(std::make_unique<FileObserver>(new FileObserver(cb, i)));
+        fo.push_back(std::make_unique<FileObserver>(cb, i));
     for(auto i = 0; i < logThreads; ++i)
-        lo.push_back(std::make_unique<LogObserver>(new LogObserver(cb, i)));
+        lo.push_back(std::make_unique<LogObserver>(cb, i));
     for(auto& i : fo)
         obsThreads.emplace_back(std::thread(*i));
     for(auto& i : lo)
