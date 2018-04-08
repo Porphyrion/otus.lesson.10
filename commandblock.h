@@ -38,7 +38,7 @@ public:
     void appendCommand(std::string command);
     void setStatus(Status s);
 
-    std::atomic_bool lastBulk_;
+    std::atomic<bool> lastBulk_;
     threadSafeQueuq<Block> log_q{dataCondLog, lastBulk_};
     threadSafeQueuq<timeStampBlock> file_q{dataCondTxt, lastBulk_};
     mutable std::mutex cv_m_l;
