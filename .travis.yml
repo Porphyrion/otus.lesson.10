@@ -1,5 +1,5 @@
 language: cpp
-compiler: clang
+# compiler: clang
 before_script:
   - sudo apt-get install libboost-dev -y
   - echo "deb http://archive.ubuntu.com/ubuntu xenial main universe" | sudo tee -a /etc/apt/sources.list
