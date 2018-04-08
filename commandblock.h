@@ -36,8 +36,8 @@ public:
 
     std::atomic_bool lastBulk_;
     threadSafeQueuq<Block> log_q{dataCondLog, lastBulk_};
-    threadSafeQueuq<Block> txt_q{dataCondTxt, lastBulk_};
-    mutable std::mutex cv_m_c;
+    threadSafeQueuq<Block> file_q{dataCondTxt, lastBulk_};
+    mutable std::mutex cv_m_l;
     mutable std::mutex cv_m_txt;
 
     Metrics mainMetrics;

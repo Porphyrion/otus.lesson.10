@@ -22,7 +22,7 @@ void CommandBlock::setStatus(Status newStatus){
     else if(status == Status::start_dynamic){
         if(block.size()){
             log_q.push(block);
-            txt_q.push(block);
+            file_q.push(block);
             mainMetrics.blocks++;
         }
         dynamic = true;
@@ -31,7 +31,7 @@ void CommandBlock::setStatus(Status newStatus){
     else if(status == Status::last_bulk){
         if(block.size()){
             log_q.push(block);
-            txt_q.push(block);
+            file_q.push(block);
         }
         lastBulk_.store(false);
         dataCondLog.notify_all();
@@ -39,7 +39,7 @@ void CommandBlock::setStatus(Status newStatus){
     }
     else if(status == Status::stop){
         log_q.push(block);
-        txt_q.push(block);
+        file_q.push(block);
         mainMetrics.blocks++;
         block.clear();
     };

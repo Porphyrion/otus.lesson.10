@@ -22,7 +22,7 @@ public:
 
 private:
     std::shared_ptr<CommandBlock> cb;
-    std::vector<std::unique_ptr<CoutObserver>>  co;
+    std::vector<std::unique_ptr<FileObserver>>  fo;
     std::vector<std::unique_ptr<LogObserver>> lo;
     std::vector<std::thread> obsThreads;
 

@@ -2,8 +2,10 @@
 
 #include <atomic>
 
-struct Metrics{
-    int blocks = 0;
-    int commands = 0;
-    int lines = 0;
+class Metrics{
+public:
+    Metrics():blocks(0), commands(0), lines(0){};
+    int blocks;
+    int commands;
+    int lines;
 };

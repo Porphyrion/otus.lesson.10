@@ -5,10 +5,10 @@ Interpreter::Interpreter(int n_) : cb(std::make_shared<CommandBlock>(n_))
     mainMetrics = std::unique_ptr<Metrics>();
     obsThreads.reserve(4);
     for(auto i = 0; i < 2; ++i)
-        co.push_back(std::make_unique<CoutObserver>(cb));
+        fo.push_back(std::make_unique<FileObserver>(cb, i));
     for(auto i = 0; i < 2; ++i)
-        lo.push_back(std::make_unique<LogObserver>(cb));
-    for(auto& i : co)
+        lo.push_back(std::make_unique<LogObserver>(cb, i));
+    for(auto& i : fo)
         obsThreads.emplace_back(std::thread(*i));
     for(auto& i : lo)
         obsThreads.emplace_back(std::thread(*i));
@@ -39,4 +39,5 @@ void Interpreter::lastBulk(){
     }
     std::cout<<"Main thread: line "<<cb->mainMetrics.lines<<" commands "<<cb->mainMetrics.commands
         <<" blocks "<<cb->mainMetrics.blocks<<std::endl;
+
 };
