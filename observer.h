@@ -14,6 +14,7 @@ public:
     Observer(std::shared_ptr<CommandBlock> sb_, int id_) : sharedBlock(sb_),
                                                             obsMetrics(), id(std::to_string(id_)){};
     virtual void writeMetrics() = 0;
+    virtual ~Observer(){};
 protected:
     std::shared_ptr<CommandBlock> sharedBlock;
     Metrics obsMetrics;

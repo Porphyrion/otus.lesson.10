@@ -3,7 +3,7 @@
 Interpreter::Interpreter(int n_) : cb(std::make_shared<CommandBlock>(n_)), logThreads(1), fileThreads(2)
 {
     mainMetrics = std::unique_ptr<Metrics>();
-    obsThreads.reserve(4);
+    obsThreads.reserve(fileThreads + logThreads);
     for(auto i = 0; i < fileThreads; ++i)
         fo.push_back(std::make_unique<FileObserver>(cb, i));
     for(auto i = 0; i < logThreads; ++i)
@@ -17,7 +17,7 @@ Interpreter::Interpreter(int n_) : cb(std::make_shared<CommandBlock>(n_)), logTh
 Interpreter::Interpreter(int n_, int lt_, int tt_) : cb(std::make_shared<CommandBlock>(n_)), logThreads(lt_), fileThreads(tt_)
 {
     mainMetrics = std::unique_ptr<Metrics>();
-    obsThreads.reserve(4);
+    obsThreads.reserve(fileThreads + logThreads);
     for(auto i = 0; i < fileThreads; ++i)
         fo.push_back(std::make_unique<FileObserver>(cb, i));
     for(auto i = 0; i < logThreads; ++i)
