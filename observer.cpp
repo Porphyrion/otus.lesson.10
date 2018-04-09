@@ -23,7 +23,7 @@ void FileObserver::update(timeStampBlock res){
 
 void FileObserver::writeMetrics(){
     std::lock_guard<std::mutex> cout_m(sharedBlock->cv_m_txt);
-    std::cout<<"File"<<id<<": commands read "<<obsMetrics.commands<<" blocks read "<<obsMetrics.blocks<<std::endl;
+    std::cout<<"File"<<id<<": commands "<<obsMetrics.commands<<" blocks "<<obsMetrics.blocks<<std::endl;
 };
 
 void LogObserver::operator()(){
