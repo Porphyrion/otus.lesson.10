@@ -6,7 +6,7 @@ CommandBlock::CommandBlock(int n_):blockSize(n_), status(Status::nothing) {
 
 void CommandBlock::appendCommand(std::string command){
     if(!dynamic){
-        if(block.size() == 0)
+        if(!block.size())
             setStatus(Status::start);
         block.push_back(command);
         if(block.size() == blockSize)
@@ -23,6 +23,7 @@ void CommandBlock::setStatus(Status newStatus){
         block.clear();
     }
     else if(status == Status::start_dynamic){
+        timeStamp = boost::lexical_cast<std::string>(time(nullptr));
         if(block.size()) push();
         dynamic = true;
         setStatus(Status::start);

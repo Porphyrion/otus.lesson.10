@@ -18,6 +18,7 @@ public:
 
     threadSafeQueuq(std::condition_variable &dc, const std::atomic<bool>& lb_) :
     dataCond(dc),lastBulk(lb_) {};
+    
     threadSafeQueuq(threadSafeQueuq const& other){
         std::lock_guard<std::mutex> lk(other.mut);
         dataQueue =  other.dataQueue;

@@ -28,7 +28,6 @@ private:
     Status status;
     std::condition_variable dataCondLog;
     std::condition_variable dataCondTxt;
-
     void push();
 
 public:
