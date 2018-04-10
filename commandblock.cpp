@@ -20,10 +20,8 @@ void CommandBlock::setStatus(Status newStatus){
     status = newStatus;
     if(status == Status::start){
         timeStamp = boost::lexical_cast<std::string>(time(nullptr));
-        block.clear();
     }
     else if(status == Status::start_dynamic){
-        timeStamp = boost::lexical_cast<std::string>(time(nullptr));
         if(block.size()) push();
         dynamic = true;
         setStatus(Status::start);
@@ -35,14 +33,15 @@ void CommandBlock::setStatus(Status newStatus){
         dataCondTxt.notify_all();
     }
     else if(status == Status::stop){
+        if(dynamic) dynamic = false;
         push();
-        block.clear();
-        timeStamp.clear();
     };
 };
 
 void CommandBlock::push(){
     log_q.push(block);
     file_q.push(std::make_pair(timeStamp, block));
+    block.clear();
+    timeStamp.clear();
     mainMetrics.blocks++;
 }
