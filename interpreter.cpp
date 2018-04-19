@@ -1,6 +1,6 @@
 #include "interpreter.h"
 
-Interpreter::Interpreter(int n_) : cb(std::make_shared<CommandBlock>(n_)), logThreads(1), fileThreads(2)
+Interpreter::Interpreter(int n_) : cb(std::make_shared<CommandBlock>(n_)), logThreads(1), fileThreads(2), dynamicCounter(0)
 {
     mainMetrics = std::unique_ptr<Metrics>();
     obsThreads.reserve(fileThreads + logThreads);
@@ -14,7 +14,7 @@ Interpreter::Interpreter(int n_) : cb(std::make_shared<CommandBlock>(n_)), logTh
         obsThreads.emplace_back(std::thread(*i));
 };
 
-Interpreter::Interpreter(int n_, int lt_, int tt_) : cb(std::make_shared<CommandBlock>(n_)), logThreads(lt_), fileThreads(tt_)
+Interpreter::Interpreter(int n_, int lt_, int tt_) : cb(std::make_shared<CommandBlock>(n_)), logThreads(lt_), fileThreads(tt_),dynamicCounter(0)
 {
     mainMetrics = std::unique_ptr<Metrics>();
     obsThreads.reserve(fileThreads + logThreads);
