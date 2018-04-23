@@ -28,6 +28,8 @@ public:
     void operator()();
     void update(timeStampBlock s);
     void writeMetrics() override;
+
+    int bulkCounter;
 };
 
 class LogObserver : protected Observer{

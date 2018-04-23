@@ -12,13 +12,14 @@ void FileObserver::operator()(){
 
 void FileObserver::update(timeStampBlock res){
     std::lock_guard<std::mutex> txt_m(sharedBlock->cv_m_txt);
-    std::ofstream bulkFile(res.first + id + ".log", std::ios::out | std::ios::app);
+    std::ofstream bulkFile(res.first + id + std::to_string(bulkCounter) + ".log", std::ios::out | std::ios::app);
     bulkFile<<"bulk: ";
     for(auto i : res.second){
         bulkFile<<i<<" ";
     }
     bulkFile<<std::endl;
     bulkFile.close();
+    ++bulkCounter;
 };
 
 void FileObserver::writeMetrics(){
