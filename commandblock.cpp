@@ -32,7 +32,7 @@ void CommandBlock::setStatus(Status newStatus){
         dataCondLog.notify_all();
         dataCondTxt.notify_all();
     }
-    else if(status == Status::last_bulk){
+    else if(status == Status::last_bulk_not){
         lastBulk_.store(false);
         dataCondLog.notify_all();
         dataCondTxt.notify_all();
