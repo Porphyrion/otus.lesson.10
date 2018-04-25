@@ -50,7 +50,7 @@ void Interpreter::lastBulk(){
 
     if(!dynamicCounter)
         cb->setStatus(Status::last_bulk);
-    else cb->setStatus(Status::last_bulk_not_push);
+    else cb->setStatus(Status::last_bulk_not);
     for(auto& i : obsThreads){
         i.join();
     }

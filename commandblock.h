@@ -13,7 +13,7 @@
 #include "threadsafe_queue.h"
 
 enum class Status{
-    nothing, start, stop, last_bulk, start_dynamic
+    nothing, start, stop, last_bulk, start_dynamic, last_bulk_not
 };
 
 using Block = std::vector<std::string>;
