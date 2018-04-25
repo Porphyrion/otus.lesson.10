@@ -32,6 +32,11 @@ void CommandBlock::setStatus(Status newStatus){
         dataCondLog.notify_all();
         dataCondTxt.notify_all();
     }
+    else if(status == Status::last_bulk){
+        lastBulk_.store(false);
+        dataCondLog.notify_all();
+        dataCondTxt.notify_all();
+    }
     else if(status == Status::stop){
         if(dynamic) dynamic = false;
         push();
