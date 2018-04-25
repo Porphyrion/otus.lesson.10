@@ -47,7 +47,9 @@ void Interpreter::readCommand(std::string s){
 };
 
 void Interpreter::lastBulk(){
-    cb->setStatus(Status::last_bulk);
+
+    if(!dynamic)
+        cb->setStatus(Status::last_bulk);
     for(auto& i : obsThreads){
         i.join();
     }
